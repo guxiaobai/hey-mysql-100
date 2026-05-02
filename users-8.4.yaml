@@ -1,0 +1,36 @@
+---
+- hosts: metal
+  vars:
+    mysql_user_name: hey8
+    mysql_user_password: password
+
+  pre_tasks:
+    # 当其他服务器没有 .my.cnf 文件时，可以使用
+    # login_unix_socket: /var/run/mysqld/mysqld.sock
+    - name: create /root/.my.cnf
+      copy:
+        dest: /root/.my.cnf
+        content: |
+          [client]
+          socket=/var/run/mysqld/mysqld.sock
+        owner: root
+        group: root
+        mode: '0600'  
+
+  tasks:
+  - name: install dependencies
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - python3-pymysql
+
+  - name: create user
+    community.mysql.mysql_user:
+      name: "{{ mysql_user_name }}"
+      # password: "{{ mysql_user_password }}"
+      plugin: caching_sha2_password
+      plugin_auth_string: "{{ mysql_user_password }}"
+      host: "%"
+      state: present
+
