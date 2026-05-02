@@ -3,6 +3,7 @@
   vars:
     mysql_user_name: hey8
     mysql_user_password: password
+    mysql_databases: app_production
 
   pre_tasks:
     # 当其他服务器没有 .my.cnf 文件时，可以使用
@@ -32,5 +33,12 @@
       plugin: caching_sha2_password
       plugin_auth_string: "{{ mysql_user_password }}"
       host: "%"
+      append_privs: yes
+      priv: "{{ mysql_databases }}.*:ALL"
       state: present
 
+  - name: create database
+    community.mysql.mysql_db:
+      name: "{{ mysql_databases }}"
+      encoding: utf8mb4
+      state: present
