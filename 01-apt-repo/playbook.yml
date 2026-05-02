@@ -1,0 +1,42 @@
+---
+- hosts: metal
+  vars:
+    key: /usr/share/keyrings/mysql-apt-config.gpg
+    repo: http://repo.mysql.com/apt/ubuntu/
+    version: mysql-8.4-lts
+
+  handlers:
+    - name: restart mysql
+      service: name=mysql.service state=restarted
+
+  tasks:
+  - name: install dependencies
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - gnupg
+
+  - name: Add MySQL Key
+    ansible.builtin.apt_key:
+    #   keyserver: pgp.mit.edu
+    #   id: A8D3785C
+      url: https://repo.mysql.com/RPM-GPG-KEY-mysql-2025
+      keyring: "{{ key }}"
+      state: present
+
+  - name: Add MySQL Repo
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+      filename: mysql
+    with_items:
+      - deb [signed-by={{ key }}] {{ repo }} {{ ansible_facts["distribution_release"] }} {{ version }}
+      - deb [signed-by={{ key }}] {{ repo }} {{ ansible_facts["distribution_release"] }} mysql-tools
+
+  - name: install mysql
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - mysql-server
