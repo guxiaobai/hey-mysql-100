@@ -40,3 +40,10 @@
       state: present
     with_items:
       - mysql-server
+
+  # - name: allow remote connect 
+  #   replace:
+  #     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+  #     regexp: '^bind-address'
+  #     replace: '# bind-address'
+  #   notify: restart mysql

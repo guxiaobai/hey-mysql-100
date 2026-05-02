@@ -20,7 +20,6 @@ sudo dpkg-reconfigure mysql-apt-config
 ```
 
 
-
 ### Installing MySQL with APT
 
 ```bash
