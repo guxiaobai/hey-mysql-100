@@ -1,0 +1,6 @@
+# https://dev.mysql.com/doc/refman/8.4/en/option-files.html
+
+[client]
+socket=/var/run/mysqld/mysqld.sock
+# login_user: root
+# login_password: rootpass
