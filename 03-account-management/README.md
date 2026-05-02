@@ -4,6 +4,16 @@
 |:---:|:---:
 `Mon May  9 14:58:44 CST 2022` | -
 
+### 创建新用户
+
+```bash
+create user 'hey8'@'%' IDENTIFIED WITH caching_sha2_password by 'password';
+```
+
+```bash
+SELECT user, host, plugin FROM mysql.user;
+```
+
 ###  如何让 root 用户可以远程登陆
 
 [15.7.1.1 ALTER USER Statement](https://dev.mysql.com/doc/refman/8.4/en/alter-user.html)
