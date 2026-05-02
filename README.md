@@ -1,5 +1,10 @@
 # Hey MySQL 100
 
+检查版本
+
+```
+select version();
+```
 
 ### macOS
 
