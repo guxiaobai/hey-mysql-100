@@ -1,8 +1,5 @@
 # Hey MySQL 100
 
-```bash
-SHOW PLUGINS;
-```
 
 ### macOS
 
