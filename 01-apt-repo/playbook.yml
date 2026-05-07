@@ -1,5 +1,5 @@
 ---
-- hosts: metal
+- hosts: all
   vars:
     key: /usr/share/keyrings/mysql-apt-config.gpg
     repo: http://repo.mysql.com/apt/ubuntu/
@@ -10,13 +10,6 @@
       service: name=mysql.service state=restarted
 
   tasks:
-  - name: install dependencies
-    apt:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - gnupg
-
   - name: Add MySQL Key
     ansible.builtin.apt_key:
     #   keyserver: pgp.mit.edu
