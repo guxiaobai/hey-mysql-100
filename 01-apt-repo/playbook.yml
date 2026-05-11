@@ -1,9 +1,11 @@
 ---
 - hosts: all
+  gather_facts: false
   vars:
-    key: /usr/share/keyrings/mysql-apt-config.gpg
-    repo: http://repo.mysql.com/apt/ubuntu/
-    version: mysql-8.4-lts
+    mysql_key: /usr/share/keyrings/mysql-apt-config.gpg
+    # mysql_repo: http://repo.mysql.com/apt/ubuntu/
+    mysql_repo: https://mirrors.tuna.tsinghua.edu.cn/mysql/apt/ubuntu
+    mysql_version: mysql-8.4-lts
 
   handlers:
     - name: restart mysql
@@ -15,7 +17,7 @@
     #   keyserver: pgp.mit.edu
     #   id: A8D3785C
       url: https://repo.mysql.com/RPM-GPG-KEY-mysql-2025
-      keyring: "{{ key }}"
+      keyring: "{{ mysql_key }}"
       state: present
 
   - name: Add MySQL Repo
@@ -23,9 +25,10 @@
       repo: "{{ item }}"
       state: present
       filename: mysql
-    with_items:
-      - deb [signed-by={{ key }}] {{ repo }} {{ ansible_facts["distribution_release"] }} {{ version }}
-      - deb [signed-by={{ key }}] {{ repo }} {{ ansible_facts["distribution_release"] }} mysql-tools
+      update_cache: yes
+    loop:
+      - deb [signed-by={{ mysql_key }}] {{ mysql_repo }} noble {{ mysql_version }}
+      - deb [signed-by={{ mysql_key }}] {{ mysql_repo }} noble mysql-tools
 
   - name: install mysql
     apt:
